@@ -154,10 +154,20 @@ fun menu(fp: MutableState<FractalPainter>){
 
                 Text("${dynIt.value}")
 
+                val previousStates = mutableListOf<FractalState>()
 
-                var i = 0                                                                             //i убрать. Сделал так, чтобы ошибка не вылетала
+                //var i = 0                                                                             //i убрать. Сделал так, чтобы ошибка не вылетала
                 IconButton(onClick = {println(fractalColor.value)}){
                     Icon(Icons.Filled.ArrowBack, contentDescription = "Вернуться на шаг назад")
+
+                    fun arrowBack(fp: MutableState<FractalPainter>) {
+                        // Проверяем, есть ли предыдущие состояния фрактала
+                        if (fp.value.previousStates.isNotEmpty()) {
+                            // Если есть, то устанавливаем текущее состояние фрактала на предыдущее
+                            fp.value.state = fp.value.previousStates.last()
+                            fp.value.refresh = true
+                        }
+                    }
                 }
 
                 Box {
@@ -206,7 +216,7 @@ fun menu(fp: MutableState<FractalPainter>){
                         }
                     }
                 }
-            }
+
         }
     ) {
         DrawingPanel(fp, fractalColor, fractalFunction){size ->
